@@ -6,10 +6,11 @@
     <description>Cordova FtpClient Plugin</description>
     <license>MIT</license>
     <keywords>cordova,ftp</keywords>
-
+	
+	<asset src="www/js" target="js" />
 
     <js-module src="www/js/ftpclient.js" name="FtpClient">
-        <clobbers target="FtpClient" />
+        <clobbers target="ftpclient" />
     </js-module>
 
     <!-- android -->
