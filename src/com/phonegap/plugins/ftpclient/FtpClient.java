@@ -70,12 +70,17 @@ public class FtpClient extends CordovaPlugin {
      * @throws IOException
      */
     private void put(String filename, URL url) throws IOException {
-        FTPClient f = setup(url);
-        BufferedInputStream buffIn=new BufferedInputStream(new FileInputStream(filename));
-        f.storeFile(extractFileName(url), buffIn);
-        buffIn.close();
+        try {
+            FTPClient f = setup(url);
+            BufferedInputStream buffIn=new BufferedInputStream(new FileInputStream(filename));
+            f.storeFile(extractFileName(url), buffIn);
+            buffIn.close();
 
-        teardown(f);
+            teardown(f);
+        }catch(IOException ioe) {
+            System.err.println("Error uploading file: " + ioe.getMessage());
+            throw ioe;
+        }
     }
 
     /**
@@ -86,14 +91,19 @@ public class FtpClient extends CordovaPlugin {
      * @throws IOException
      */
     private void get(String filename, URL url) throws IOException {
-        FTPClient f = setup(url);
-		
-        BufferedOutputStream buffOut=new BufferedOutputStream(new FileOutputStream(filename));
-        f.retrieveFile(extractFileName(url), buffOut);
-        buffOut.flush();
-        buffOut.close();
+        try {
+            FTPClient f = setup(url);
 
-        teardown(f);
+            BufferedOutputStream buffOut=new BufferedOutputStream(new FileOutputStream(filename));
+            f.retrieveFile(extractFileName(url), buffOut);
+            buffOut.flush();
+            buffOut.close();
+
+            teardown(f);
+        }catch(IOException ioe) {
+            System.err.println("Error uploading file: " + ioe.getMessage());
+            throw ioe;
+        }
     }
 
     /**
@@ -116,7 +126,15 @@ public class FtpClient extends CordovaPlugin {
      */
     private FTPClient setup(URL url) throws IOException {
         FTPClient f = new FTPClient();
-        f.connect(url.getHost(), extractPort(url));
+        String host = url.getHost();
+        int port = extractPort(url);
+        f.connect(host, port);
+        System.out.println("Connecting to FTP at " + host + ":" + port);
+        if (f.isConnected()) {
+            System.out.println("FTP connection successful");
+        }else {
+            System.out.println("FTP connection failed");
+        }
 
         StringTokenizer tok = new StringTokenizer(url.getUserInfo(), ":");
         f.login(tok.nextToken(), tok.nextToken());
