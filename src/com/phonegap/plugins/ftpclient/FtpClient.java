@@ -75,6 +75,7 @@ public class FtpClient extends CordovaPlugin {
             BufferedInputStream buffIn=new BufferedInputStream(new FileInputStream(filename));
             f.storeFile(extractFileName(url), buffIn);
             buffIn.close();
+            System.out.println("Uploading file " + filename + " was successful");
 
             teardown(f);
         }catch(IOException ioe) {
@@ -98,10 +99,11 @@ public class FtpClient extends CordovaPlugin {
             f.retrieveFile(extractFileName(url), buffOut);
             buffOut.flush();
             buffOut.close();
+            System.out.println("Downloading file " + filename + " was successful");
 
             teardown(f);
         }catch(IOException ioe) {
-            System.err.println("Error uploading file: " + ioe.getMessage());
+            System.err.println("Error downloading file: " + ioe.getMessage());
             throw ioe;
         }
     }
@@ -115,6 +117,7 @@ public class FtpClient extends CordovaPlugin {
     private void teardown(FTPClient f) throws IOException {
         f.logout();
         f.disconnect();
+        System.out.println("FTP connection has been disconnected successfully");
     }
 
     /**
