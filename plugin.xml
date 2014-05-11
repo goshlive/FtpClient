@@ -20,6 +20,6 @@
             </feature>
         </config-file>
 
-        <source-file src="src/phonegap/plugins/ftpclient/FtpClient.java" target-dir="src/phonegap/plugins/ftpclient" />
+        <source-file src="src/com/phonegap/plugins/ftpclient/FtpClient.java" target-dir="src/com/phonegap/plugins/ftpclient" />
      </platform>
 </plugin>
